@@ -17,7 +17,7 @@ export function ProjectsManager() {
 
   const loadProjects = async () => {
     const { data, error } = await supabase.from('projects').select('*').order('order', { ascending: true });
-    if (error) console.error(error);
+    if (error) console.error('[ProjectsManager] Load error:', error.message);
     else setProjects(data || []);
   };
 
@@ -85,7 +85,6 @@ export function ProjectsManager() {
         const { error } = await supabase.from('projects').update(dataToSave).eq('id', id);
         saveError = error;
       } else {
-        // Get the highest order to append to the end
         const maxOrder = projects.length > 0 ? Math.max(...projects.map(p => p.order || 0)) : 0;
         const { error } = await supabase.from('projects').insert([{ ...dataToSave, order: maxOrder + 1 }]);
         saveError = error;
@@ -102,7 +101,7 @@ export function ProjectsManager() {
       setSaveMessage({ type: 'success', text: 'Project saved successfully!' });
       setTimeout(() => setSaveMessage(null), 3000);
     } catch (error) {
-      console.error('Save error:', error);
+      console.error('[ProjectsManager] Save error:', error instanceof Error ? error.message : 'Unknown error');
       setSaveMessage({ type: 'error', text: 'Failed to save project' });
       setTimeout(() => setSaveMessage(null), 3000);
     }
@@ -117,7 +116,7 @@ export function ProjectsManager() {
       setDeletingId(null);
       loadProjects();
     } catch (error) {
-      console.error('Delete error:', error);
+      console.error('[ProjectsManager] Delete error:', error instanceof Error ? error.message : 'Unknown error');
       setDeletingId(null);
     }
   };
@@ -149,7 +148,6 @@ export function ProjectsManager() {
 
   const renderForm = () => (
     <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-6 mb-6">
-      {/* Basic Details Section */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-slate-200 border-b border-slate-700 pb-2">Basic Details</h3>
         <div className="grid grid-cols-1 gap-4">
@@ -183,7 +181,6 @@ export function ProjectsManager() {
         </div>
       </div>
 
-      {/* Media & Links Section */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-slate-200 border-b border-slate-700 pb-2">Media & Links</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -232,7 +229,6 @@ export function ProjectsManager() {
         </div>
       </div>
 
-      {/* Tech Stack Section */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-slate-200 border-b border-slate-700 pb-2">Tech Stack</h3>
         <div>
@@ -351,4 +347,3 @@ export function ProjectsManager() {
     </div>
   );
 }
-
