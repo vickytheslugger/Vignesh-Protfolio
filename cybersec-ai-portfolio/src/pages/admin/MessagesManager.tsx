@@ -11,7 +11,7 @@ export function MessagesManager() {
 
   const loadMessages = async () => {
     const { data, error } = await supabase.from('messages').select('*').order('created_at', { ascending: false });
-    if (error) console.error(error);
+    if (error) console.error('[MessagesManager] Load error:', error.message);
     else setMessages(data || []);
   };
 
@@ -24,7 +24,7 @@ export function MessagesManager() {
       setDeletingId(null);
       loadMessages();
     } catch (error) {
-      console.error('Delete error:', error);
+      console.error('[MessagesManager] Delete error:', error instanceof Error ? error.message : 'Unknown error');
       setDeletingId(null);
     }
   };
@@ -34,7 +34,6 @@ export function MessagesManager() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-slate-100">Messages</h2>
       </div>
-
       <div className="space-y-4">
         {messages.length === 0 ? (
           <div className="text-slate-400 text-center py-8">No messages found.</div>
