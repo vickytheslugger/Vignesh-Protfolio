@@ -31,6 +31,7 @@ export function Projects() {
           {projects.map((project, index) => (
             <motion.div
               key={project.id}
+              onClick={() => project.live_url && window.open(project.live_url, '_blank')}
               initial={{ opacity: 0, y: 50, rotateX: 30 }}
               whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true, margin: "-50px" }}
@@ -41,7 +42,7 @@ export function Projects() {
                 rotateY: -5, 
                 boxShadow: "0 20px 40px -10px rgba(52,211,153,0.4)" 
               }}
-              className="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden group hover:border-emerald-500/50 transition-all duration-300 flex flex-col [transform-style:preserve-3d]"
+              className={`bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden group hover:border-emerald-500/50 transition-all duration-300 flex flex-col [transform-style:preserve-3d] ${project.live_url ? 'cursor-pointer' : ''}`}
             >
               {project.image ? (
                 <div className="h-48 overflow-hidden">
@@ -81,6 +82,7 @@ export function Projects() {
                     <motion.a 
                       whileHover={{ scale: 1.1, textShadow: "0px 0px 8px rgba(52,211,153,0.8)" }}
                       whileTap={{ scale: 0.9 }}
+                      onClick={(e) => e.stopPropagation()}
                       href={project.github_url} 
                       target="_blank" 
                       rel="noopener noreferrer" 
@@ -94,6 +96,7 @@ export function Projects() {
                     <motion.a 
                       whileHover={{ scale: 1.1, textShadow: "0px 0px 8px rgba(52,211,153,0.8)" }}
                       whileTap={{ scale: 0.9 }}
+                      onClick={(e) => e.stopPropagation()}
                       href={project.live_url} 
                       target="_blank" 
                       rel="noopener noreferrer" 
