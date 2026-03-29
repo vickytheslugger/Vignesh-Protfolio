@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Plus, Pencil, Trash2, Check, AlertCircle } from 'lucide-react';
+import { Plus, Pencil, Trash2, Check, AlertCircle, Upload, Image, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export function ProjectsManager() {
@@ -10,6 +10,8 @@ export function ProjectsManager() {
   const [isCreating, setIsCreating] = useState(false);
   const [saveMessage, setSaveMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadProjects();
@@ -23,11 +25,49 @@ export function ProjectsManager() {
 
   const isValidUrl = (url: string) => {
     if (!url) return true;
+    if (url.startsWith('data:image/') || url.startsWith('blob:')) return true;
     try {
       const parsed = new URL(url);
       return ['http:', 'https:'].includes(parsed.protocol);
     } catch {
       return false;
+    }
+  };
+
+  const handleImageUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setErrors(prev => ({ ...prev, image: 'Please select an image file' }));
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors(prev => ({ ...prev, image: 'Image must be less than 5MB' }));
+      return;
+    }
+
+    setIsUploading(true);
+    setErrors(prev => ({ ...prev, image: '' }));
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `project-${Date.now()}.${fileExt}`;
+      const filePath = `projects/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('project-images')
+        .upload(filePath, file, { cacheControl: '3600', upsert: false });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('project-images')
+        .getPublicUrl(filePath);
+
+      setFormData((prev: any) => ({ ...prev, image: publicUrl }));
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      setErrors(prev => ({ ...prev, image: `Upload failed: ${error.message}` }));
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -188,17 +228,83 @@ export function ProjectsManager() {
         <h3 className="text-lg font-medium text-slate-200 border-b border-slate-700 pb-2">Media & Links</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-slate-400 mb-1">Image URL</label>
-            <input
-              type="text"
-              value={formData.image || ''}
-              onChange={e => {
-                setFormData({...formData, image: e.target.value});
-                if (errors.image) setErrors({...errors, image: ''});
-              }}
-              placeholder="https://images.unsplash.com/..."
-              className={`w-full bg-slate-900 border ${errors.image ? 'border-red-500' : 'border-slate-700'} rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors`}
-            />
+            <label className="block text-sm font-medium text-slate-400 mb-1">Project Image</label>
+            
+            {/* Image Preview */}
+            {formData.image && (
+              <div className="relative mb-3 rounded-lg overflow-hidden border border-slate-700 bg-slate-900 group">
+                <img 
+                  src={formData.image} 
+                  alt="Preview" 
+                  className="w-full h-48 object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setFormData({...formData, image: ''})}
+                  className="absolute top-2 right-2 p-1.5 bg-red-500/80 hover:bg-red-500 text-white rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                  title="Remove image"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* Upload Button + URL Input */}
+            <div className="flex gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageUpload(file);
+                  e.target.value = '';
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg hover:bg-emerald-500/20 transition-colors disabled:opacity-50 whitespace-nowrap"
+              >
+                {isUploading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4" />
+                    Upload
+                  </>
+                )}
+              </button>
+              <input
+                type="text"
+                value={formData.image || ''}
+                onPaste={(e) => {
+                  const items = e.clipboardData?.items;
+                  if (items) {
+                    for (let i = 0; i < items.length; i++) {
+                      if (items[i].type.indexOf('image') !== -1) {
+                        e.preventDefault();
+                        const file = items[i].getAsFile();
+                        if (file) handleImageUpload(file);
+                        return;
+                      }
+                    }
+                  }
+                }}
+                onChange={e => {
+                  setFormData({...formData, image: e.target.value});
+                  if (errors.image) setErrors({...errors, image: ''});
+                }}
+                placeholder="Or paste an image URL/file..."
+                className={`flex-1 bg-slate-900 border ${errors.image ? 'border-red-500' : 'border-slate-700'} rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors`}
+              />
+            </div>
             <ErrorMessage message={errors.image} />
           </div>
           <div>
