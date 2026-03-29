@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .crt-flicker {
+    animation: flicker 0.1s infinite;
+  }
+
+  @keyframes flicker {
+    0% { opacity: 0.98; filter: brightness(1); }
+    5% { opacity: 0.92; filter: brightness(1.02); }
+    10% { opacity: 0.96; filter: brightness(0.98); }
+    15% { opacity: 0.94; filter: brightness(1.01); }
+    20% { opacity: 0.99; filter: brightness(1); }
+    25% { opacity: 0.93; filter: brightness(1.03); }
+    30% { opacity: 0.97; filter: brightness(0.97); }
+    35% { opacity: 0.95; filter: brightness(1.02); }
+    40% { opacity: 0.98; filter: brightness(1); }
+    45% { opacity: 0.92; filter: brightness(1.04); }
+    50% { opacity: 0.96; filter: brightness(0.96); }
+    55% { opacity: 0.94; filter: brightness(1.01); }
+    60% { opacity: 0.99; filter: brightness(1); }
+    65% { opacity: 0.93; filter: brightness(1.02); }
+    70% { opacity: 0.97; filter: brightness(0.98); }
+    75% { opacity: 0.95; filter: brightness(1.03); }
+    80% { opacity: 0.98; filter: brightness(1); }
+    85% { opacity: 0.92; filter: brightness(1.01); }
+    90% { opacity: 0.96; filter: brightness(0.99); }
+    95% { opacity: 0.94; filter: brightness(1.02); }
+    100% { opacity: 0.98; filter: brightness(1); }
+  }
+}
