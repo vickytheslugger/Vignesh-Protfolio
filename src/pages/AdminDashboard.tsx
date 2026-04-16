@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { LayoutDashboard, FolderKanban, Code2, Briefcase, FileText, LogOut, MessageSquare, Menu, X, Clock } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Code2, Briefcase, FileText, LogOut, MessageSquare, Menu, X, Clock, Award } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { ProjectsManager } from './admin/ProjectsManager';
@@ -8,6 +8,7 @@ import { SkillsManager } from './admin/SkillsManager';
 import { ExperienceManager } from './admin/ExperienceManager';
 import { ContentManager } from './admin/ContentManager';
 import { MessagesManager } from './admin/MessagesManager';
+import { CertificationsManager } from './admin/CertificationsManager';
 
 export function AdminDashboard() {
   const { logout } = useAuth();
@@ -61,6 +62,7 @@ export function AdminDashboard() {
     { id: 'projects', label: 'Projects', icon: FolderKanban },
     { id: 'skills', label: 'Skills & Tools', icon: Code2 },
     { id: 'experience', label: 'Experience', icon: Briefcase },
+    { id: 'certifications', label: 'Certifications', icon: Award },
     { id: 'content', label: 'Content', icon: FileText },
     { id: 'messages', label: 'Messages', icon: MessageSquare },
   ];
@@ -174,6 +176,7 @@ export function AdminDashboard() {
             {activeTab === 'skills' && <SkillsManager />}
             {activeTab === 'experience' && <ExperienceManager />}
             {activeTab === 'content' && <ContentManager />}
+            {activeTab === 'certifications' && <CertificationsManager />}
             {activeTab === 'messages' && <MessagesManager />}
           </div>
         </div>

@@ -24,7 +24,7 @@ export function AdminLogin() {
 
       if (error) throw error;
       
-      navigate('/admin/dashboard');
+      navigate('/vicky-panel/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to login');
     } finally {

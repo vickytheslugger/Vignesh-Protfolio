@@ -7,6 +7,7 @@ import { About } from './pages/About';
 import { Projects } from './pages/Projects';
 import { Skills } from './pages/Skills';
 import { Experience } from './pages/Experience';
+import { Certifications } from './pages/Certifications';
 import { Contact } from './pages/Contact';
 import { AdminLogin } from './pages/AdminLogin';
 import { ForgotPassword } from './pages/ForgotPassword';
@@ -39,6 +40,9 @@ function MainSite() {
         <SectionWrapper id="experience">
           <Experience />
         </SectionWrapper>
+        <SectionWrapper id="certifications">
+          <Certifications />
+        </SectionWrapper>
         <SectionWrapper id="contact">
           <Contact />
         </SectionWrapper>
@@ -49,7 +53,7 @@ function MainSite() {
 
 function AnimatedRoutes() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  const isAdminRoute = location.pathname.startsWith('/vicky-panel');
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-emerald-500/30">
@@ -58,11 +62,11 @@ function AnimatedRoutes() {
       <AnimatePresence mode="wait">
         <Routes location={location}>
           <Route path="/" element={<MainSite />} />
-          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/vicky-panel" element={<AdminLogin />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/update-password" element={<UpdatePassword />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/vicky-panel/dashboard" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </AnimatePresence>

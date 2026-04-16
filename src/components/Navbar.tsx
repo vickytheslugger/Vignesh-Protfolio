@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Shield, Menu, X, Settings } from 'lucide-react';
+import { Shield, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -14,6 +14,7 @@ export function Navbar() {
     { name: 'Projects', path: '#projects' },
     { name: 'Skills & Tools', path: '#skills' },
     { name: 'Experience', path: '#experience' },
+    { name: 'Certifications', path: '#certifications' },
     { name: 'Contact', path: '#contact' },
   ];
 
@@ -55,18 +56,6 @@ export function Navbar() {
                   </motion.div>
                 </button>
               ))}
-              <Link 
-                to="/admin"
-                className="p-2 text-slate-400 hover:text-emerald-400 transition-colors"
-                aria-label="Admin Panel"
-              >
-                <motion.div
-                  whileHover={{ rotate: 90, scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Settings className="w-5 h-5" />
-                </motion.div>
-              </Link>
             </div>
           </div>
 
@@ -102,15 +91,6 @@ export function Navbar() {
                 {link.name}
               </button>
             ))}
-            <Link
-              to="/admin"
-              onClick={() => setIsOpen(false)}
-              aria-label="Admin Panel"
-              className="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium font-mono text-slate-400 hover:bg-slate-800 hover:text-emerald-400"
-            >
-              <Settings className="w-5 h-5" />
-              <span>Admin Panel</span>
-            </Link>
           </div>
         </motion.div>
       )}

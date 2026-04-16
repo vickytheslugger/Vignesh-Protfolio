@@ -5,7 +5,7 @@ export function ProtectedRoute() {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to="/vicky-panel" replace />;
   }
 
   return <Outlet />;
