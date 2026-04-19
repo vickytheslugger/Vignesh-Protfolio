@@ -152,52 +152,32 @@ export function Home() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.5, rotateX: 60, z: -500 }}
-            animate={{ opacity: 1, scale: 1, rotateX: 0, z: 0 }}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, delay: 0.3, type: "spring", bounce: 0.4 }}
-            className="hidden lg:flex justify-center [transform-style:preserve-3d]"
+            className="hidden lg:flex justify-center"
           >
-            <div className="relative w-96 h-96 [transform-style:preserve-3d]">
-              {/* Complex Orbital Rings */}
+            <div className="relative w-96 h-96">
+              {/* Orbital Rings — CSS animations */}
               {[...Array(3)].map((_, i) => (
-                <motion.div
+                <div
                   key={i}
-                  animate={{ 
-                    rotateZ: i % 2 === 0 ? 360 : -360,
-                    rotateX: [0, 45, 0],
-                    rotateY: [0, 45, 0]
-                  }}
-                  transition={{ 
-                    rotateZ: { duration: 10 + i * 5, repeat: Infinity, ease: "linear" },
-                    rotateX: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-                    rotateY: { duration: 12, repeat: Infinity, ease: "easeInOut" }
-                  }}
-                  className="absolute inset-0 border border-emerald-500/20 rounded-full"
+                  className="absolute inset-0 border border-emerald-500/20 rounded-full orbital-ring"
                   style={{ 
                     padding: i * 20,
-                    transform: `translateZ(${i * 40}px)`
+                    animationDuration: `${10 + i * 5}s`,
+                    animationDirection: i % 2 === 0 ? 'normal' : 'reverse',
                   }}
                 />
               ))}
               
               {/* Central Core */}
-              <motion.div 
-                animate={{ 
-                  scale: [1, 1.1, 1],
-                  boxShadow: [
-                    "0 0 20px rgba(52,211,153,0.3)",
-                    "0 0 50px rgba(52,211,153,0.6)",
-                    "0 0 20px rgba(52,211,153,0.3)"
-                  ]
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 flex items-center justify-center [transform:translateZ(100px)]"
-              >
+              <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative">
                   <div className="absolute inset-0 bg-emerald-400/20 blur-2xl rounded-full animate-pulse"></div>
                   <ShieldAlert className="w-40 h-40 text-emerald-400 drop-shadow-[0_0_20px_rgba(52,211,153,1)]" />
                 </div>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         </div>

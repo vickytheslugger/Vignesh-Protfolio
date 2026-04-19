@@ -24,7 +24,7 @@ function MainSite() {
   return (
     <div className="bg-slate-950 relative">
       <TerminalBackground />
-      <div className="relative z-10 crt-flicker">
+      <div className="relative z-10">
         <SectionWrapper id="home">
           <Home />
         </SectionWrapper>

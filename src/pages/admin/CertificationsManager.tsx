@@ -56,8 +56,8 @@ export function CertificationsManager() {
 
       setFormData((prev: any) => ({ ...prev, image_url: publicUrl }));
     } catch (error: any) {
-      console.error('Upload error:', error);
-      setImageUploadError(`Upload failed: ${error.message}`);
+      console.error('Image upload error:', error);
+      setImageUploadError(`Upload failed: ${error.message || error.statusCode || 'Unknown error'}`);
     } finally {
       setIsUploadingImage(false);
     }
@@ -103,8 +103,8 @@ export function CertificationsManager() {
 
       setFormData((prev: any) => ({ ...prev, document_url: publicUrl, document_name: file.name }));
     } catch (error: any) {
-      console.error('Upload error:', error);
-      setDocUploadError(`Upload failed: ${error.message}`);
+      console.error('Document upload error:', error);
+      setDocUploadError(`Upload failed: ${error.message || error.statusCode || 'Unknown error'}`);
     } finally {
       setIsUploadingDoc(false);
     }
@@ -138,10 +138,10 @@ export function CertificationsManager() {
 
       setSaveMessage({ type: 'success', text: 'Successfully saved' });
       setTimeout(() => setSaveMessage(null), 3000);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Save error:', error);
-      setSaveMessage({ type: 'error', text: 'Not saved' });
-      setTimeout(() => setSaveMessage(null), 3000);
+      setSaveMessage({ type: 'error', text: `Save failed: ${error.message || error.details || 'Unknown error'}` });
+      setTimeout(() => setSaveMessage(null), 5000);
     }
   };
 

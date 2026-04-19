@@ -18,32 +18,35 @@ html {
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
+}
 
-  .crt-flicker {
-    animation: flicker 0.1s infinite;
+/* Terminal background floating lines — pure CSS, GPU-accelerated */
+.terminal-line-float {
+  will-change: transform;
+  animation: terminalFloat linear infinite;
+  transform: translateY(110vh);
+}
+
+@keyframes terminalFloat {
+  0% {
+    transform: translateY(110vh);
   }
+  100% {
+    transform: translateY(-20vh);
+  }
+}
 
-  @keyframes flicker {
-    0% { opacity: 0.98; filter: brightness(1); }
-    5% { opacity: 0.92; filter: brightness(1.02); }
-    10% { opacity: 0.96; filter: brightness(0.98); }
-    15% { opacity: 0.94; filter: brightness(1.01); }
-    20% { opacity: 0.99; filter: brightness(1); }
-    25% { opacity: 0.93; filter: brightness(1.03); }
-    30% { opacity: 0.97; filter: brightness(0.97); }
-    35% { opacity: 0.95; filter: brightness(1.02); }
-    40% { opacity: 0.98; filter: brightness(1); }
-    45% { opacity: 0.92; filter: brightness(1.04); }
-    50% { opacity: 0.96; filter: brightness(0.96); }
-    55% { opacity: 0.94; filter: brightness(1.01); }
-    60% { opacity: 0.99; filter: brightness(1); }
-    65% { opacity: 0.93; filter: brightness(1.02); }
-    70% { opacity: 0.97; filter: brightness(0.98); }
-    75% { opacity: 0.95; filter: brightness(1.03); }
-    80% { opacity: 0.98; filter: brightness(1); }
-    85% { opacity: 0.92; filter: brightness(1.01); }
-    90% { opacity: 0.96; filter: brightness(0.99); }
-    95% { opacity: 0.94; filter: brightness(1.02); }
-    100% { opacity: 0.98; filter: brightness(1); }
+/* Orbital ring spin — pure CSS */
+.orbital-ring {
+  will-change: transform;
+  animation: orbitalSpin linear infinite;
+}
+
+@keyframes orbitalSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
