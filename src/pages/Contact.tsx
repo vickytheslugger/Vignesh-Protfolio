@@ -13,6 +13,13 @@ export function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formState.email.toLowerCase().endsWith('@gmail.com')) {
+      setError('Please use a valid @gmail.com address.');
+      setTimeout(() => setError(null), 5000);
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
     
@@ -179,15 +186,17 @@ export function Contact() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-2">Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-2">Email (Gmail only)</label>
                   <input
                     type="email"
                     id="email"
                     required
+                    pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                    title="Please enter a valid @gmail.com address"
                     value={formState.email}
                     onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-slate-100 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-colors"
-                    placeholder="john@example.com"
+                    placeholder="john@gmail.com"
                   />
                 </div>
                 <div>
